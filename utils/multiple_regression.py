@@ -30,13 +30,17 @@ def cross_validate(model, X_train_chosen, y_train, iterations = 5, random_seed =
     return (avg_train_error, avg_validate_error)
 
 
-def describe_multiple_regression_model(X_train, X_test, y_train, y_test, considered_features):
+def describe_multiple_regression_model(X_train, X_test, y_train, y_test, considered_features, new_feature):
     X_train_chosen = X_train[considered_features]
     model = multiple_regression_model(X_train_chosen, y_train)
     (avg_train_error, avg_val_error) = model.cross_validate(X_train_chosen, y_train)
-    print(f"\nAvg train error =\t{avg_train_error}")
-    print(f"Avg validate error =\t{avg_val_error}")
-    print(f"Test error =\t\t{round_result(y_test, model.predict(X_test[considered_features]))[1]['actual_mean_sqrt']}\n")
+    print(f"Added: {new_feature}")
+    print(f"\tAvg train error =\t{avg_train_error}")
+    print(f"\tAvg validate error =\t{avg_val_error}")
+    test_predicted = model.predict(X_test[considered_features])
+    test_error = round_result(y_test, test_predicted)[1]['actual_mean_sqrt']
+    print(f"\tTest error =\t\t{test_error}\n")
+    return (test_error, test_predicted)
 
 
 class multiple_regression_model:
